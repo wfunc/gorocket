@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+
+	"github.com/codingeasygo/util/xmap"
 )
 
 type UsersPresenceResponse struct {
@@ -482,4 +484,23 @@ func (c *Client) UsersUpdate(user *UserUpdateRequest) (*UserUpdateResponse, erro
 	}
 
 	return &res, nil
+}
+
+// Get users list
+func (c *Client) UsersList() (xmap.M, error) {
+	req, err := http.NewRequest("GET",
+		fmt.Sprintf("%s/%s/users.list", c.baseURL, c.apiVersion),
+		nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := xmap.M{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }

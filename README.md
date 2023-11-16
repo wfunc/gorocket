@@ -9,7 +9,7 @@ Just import
 
 ```go
 import (
-	"github.com/badkaktus/gorocket"
+	"github.com/wfunc/gorocket"
 )
 ```
 
