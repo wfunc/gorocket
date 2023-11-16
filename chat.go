@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/codingeasygo/util/xmap"
 )
 
 type Message struct {
@@ -308,4 +310,32 @@ func (c *Client) UnpinMessage(param *SingleMessageId) (*SimpleSuccessResponse, e
 	}
 
 	return &res, nil
+}
+
+// Chat Message Send
+func (c *Client) SendMessage(rid, msg string) (xmap.M, error) {
+	param := xmap.M{
+		"message": xmap.M{
+			"rid": rid,
+			"msg": msg,
+		},
+	}
+
+	opt, _ := json.Marshal(param)
+
+	req, err := http.NewRequest("POST",
+		fmt.Sprintf("%s/%s/chat.sendMessage", c.baseURL, c.apiVersion),
+		bytes.NewBuffer(opt))
+
+	if err != nil {
+		return nil, err
+	}
+
+	res := xmap.M{}
+
+	if err := c.sendRequest(req, &res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
